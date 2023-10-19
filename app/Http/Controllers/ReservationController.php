@@ -41,7 +41,7 @@ class ReservationController extends Controller
             ->first();
             dd($emprunteur);
         if ($emprunteur) {
-            return "Nom de l'emprunteur : " . $emprunteur->nom . ' ' . $emprunteur->prenom;
+            return "Nom de l'emprunteur : " . $emprunteur->prenom . ' ' . $emprunteur->nom;
         } else {
             return "Ce livre n'a pas d'emprunteur actuellement.";
         }

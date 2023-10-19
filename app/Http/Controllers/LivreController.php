@@ -8,11 +8,21 @@ use App\Models\Reservation;
 
 class LivreController extends Controller
 {
-    public function index()
-    {
-        $livres = Livre::orderBy('id', 'desc')->get();
-        return view('livres.index', compact('livres'));
+    public function index(Request $request)
+{
+    $disponibilite = $request->input('disponibilite', 'tous');
+
+    if ($disponibilite === 'disponible') {
+        $livres = Livre::where('disponible', 1)->paginate(10); // Paginer par 10 livres par page
+    } elseif ($disponibilite === 'emprunte') {
+        $livres = Livre::where('disponible', 0)->paginate(10); // Paginer par 10 livres par page
+    } else {
+        $livres = Livre::paginate(10); // Tous les livres paginés par 10 livres par page
     }
+
+    return view('livres.index', compact('livres'));
+}
+
 
     public function create()
     {
@@ -21,8 +31,6 @@ class LivreController extends Controller
 
     public function store(Request $request)
     {
-        // Validez les données du formulaire ici, par exemple, en utilisant la méthode $request->validate()
-
         // Créez un nouvel enregistrement de livre dans la base de données en utilisant le modèle Livre
         $nouveauLivre = new Livre();
         $nouveauLivre->isbn = $request->input('isbn');

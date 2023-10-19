@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Membre;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -12,24 +13,39 @@ class MembreController extends Controller
         return view('connexion');
     }
 
-
     public function authenticate(Request $request)
     {
+        // Validez les données d'entrée
+        $validator = Validator::make($request->all(), [
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            // Les données d'entrée ne sont pas valides, redirigez vers la page de connexion avec des erreurs de validation
+            return redirect()->route('connexion')->withErrors($validator)->withInput();
+        }
+
         $username = $request->input('username');
         $password = $request->input('password');
+
         $membre = Membre::where('username', $username)->first();
         if ($membre) {
-            // Utilisez password_verify pour comparer le mot de passe fourni avec le mot de passe haché
             if (Hash::check($password, $membre->mot_de_passe)) {
                 // Authentification réussie, connectez l'utilisateur
                 Auth::login($membre);
                 // Redirigez l'utilisateur vers la page souhaitée (par exemple, "livres.index")
                 return redirect()->route('livres.index');
+            } else {
+                // Le mot de passe ne correspond pas, redirigez vers la page de connexion avec un message d'erreur
+                return redirect()->route('connexion')->with('error', 'Mot de passe incorrect');
             }
         }
+
         // Identifiants invalides, redirigez de nouveau vers la page de connexion avec un message d'erreur
         return redirect()->route('connexion')->with('error', 'Identifiants invalides');
     }
+
     public function logout()
     {
         Auth::logout(); // Déconnexion de l'utilisateur actuel
@@ -50,11 +66,11 @@ class MembreController extends Controller
         ]);
 
         $membre = new Membre([
-            'nom' => $request->input('nom'),
             'prenom' => $request->input('prenom'),
+            'nom' => $request->input('nom'),
             'username' => $request->input('username'),
             'adresse' => $request->input('adresse'),
-            'mot_de_passe' => Hash::make($request->input('mot_de_passe')), // Utilisez Hash::make pour crypter le mot de passe
+            'mot_de_passe' => $request->input('mot_de_passe'),
         ]);
 
         $membre->save();
