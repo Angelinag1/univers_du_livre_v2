@@ -15,8 +15,13 @@ use App\Http\Controllers\ReservationController;
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
+
+    Route::get('/welcome', function () {
+    return view('welcome');
+})->name('welcome');
 });
 Route::get('/livres', [LivreController::class,'index'])->name('livres.index');
 Route::get('/livres', [ReservationController::class,'index'])->name('livres.index');
@@ -42,4 +47,4 @@ Route::get('/deconnexion', [MembreController::class, 'logout'])->name('deconnexi
 
 Route::get('/livres/rendre/{id}', [ReservationController::class, 'rendreLivre'])->name('livres.rendre');
 
-Route::post('/livres/rechercher', [LivreController::class,'rechercher'])->name('livres.rechercher');
+Route::post('/livres/recherche', [LivreController::class, 'rechercher'])->name('livres.rechercher');
