@@ -27,12 +27,12 @@ class Reservation extends Model
 {
     // Vérifiez si la relation "membre" est chargée
     if ($this->relationLoaded('membre')) {
-        return $this->membre->nom . ' ' . $this->membre->prenom;
+        return $this->membre->prenom . ' ' .  $this->membre->nom;
     } else {
         // Si la relation n'est pas chargée, essayez de la charger
         $this->load('membre');
         if ($this->relationLoaded('membre')) {
-            return $this->membre->nom . ' ' . $this->membre->prenom;
+            return $this->membre->prenom . ' ' . $this->membre->nom;
         } else {
             return 'Emprunteur inconnu';
         }
