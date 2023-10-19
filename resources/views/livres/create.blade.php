@@ -1,4 +1,3 @@
-
 @include('partials.header')
 <div class="container">
     <h2>Ajouter un livre</h2>
@@ -22,6 +21,28 @@
             <textarea class="form-control" id="description" name="description" required></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">Ajouter</button>
+        <!-- Bouton pour afficher la fenêtre modale de confirmation -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmAddModal">Ajouter</button>
+
+        <!-- Fenêtre modale de confirmation -->
+        <div class="modal fade" id="confirmAddModal" tabindex="-1" role="dialog" aria-labelledby="confirmAddModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmAddModalLabel">Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Voulez-vous vraiment ajouter ce livre ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Confirmer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
